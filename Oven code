@@ -1,0 +1,42 @@
+#include "max6675.h"
+//includes packet
+
+int ktcSO = 8;
+int ktcCS = 9;
+int ktcCLK = 10;
+//defines varibles
+MAX6675 ktc(ktcCLK, ktcCS, ktcSO);
+
+
+void setup() {
+  pinMode(11,OUTPUT);
+  //this sets pin 11 as output
+  Serial.begin(9600);
+  // give the MAX a little time to settle
+  delay(10000);
+  digitalWrite(11,HIGH);
+//turns relay on
+  
+}
+
+void loop() {
+  Serial.print("Deg C = "); 
+  Serial.print(ktc.readCelsius());
+  Serial.print("\t Deg F = ");
+  Serial.println(ktc.readFahrenheit());
+  delay(500);
+  float tempFah = (ktc.readFahrenheit());
+  String warming = "Warming, I am now on: ";
+  delay(500);
+  if (tempFah < 150) {
+   Serial.println(warming+tempFah+"°");
+    digitalWrite(11,HIGH);
+    delay(1000);
+   } else {
+     digitalWrite (11,LOW);
+     Serial.println("Reached to the heating temprature...");
+     delay(1000);
+     // if temp is under 150 print "warming + temp" if not turn relay off and print the temprature
+   }
+
+}
